@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a1a1a" />
+    <title>Task Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="app-header">
+        <h1>Task Tracker</h1>
+        <p class="header-subtitle">Manage your daily tasks</p>
+      </header>
+
+      <!-- Task Statistics -->
+      {% set total_tasks = tasks|length %}
+      {% set completed_tasks = tasks|selectattr('completed', 'true')|list|length %}
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-value">{{ total_tasks }}</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value completed-count">{{ completed_tasks }}</span>
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value pending-count">{{ total_tasks - completed_tasks }}</span>
+          <span class="stat-label">Pending</span>
+        </div>
+        {% if total_tasks > 0 %}
+        <div class="stat-item">
+          <span class="stat-value">{{ "%.0f"|format((completed_tasks / total_tasks * 100)) }}%</span>
+          <span class="stat-label">Progress</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Add Task Form -->
+      <form method="post" class="task-input-form">
+        <input 
+          type="hidden" 
+          name="action" 
+          value="add" 
+        />
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            name="description" 
+            placeholder="Add a new task..." 
+            required 
+            autofocus
+            maxlength="255"
+          />
+          <button type="submit" class="add-btn">Add</button>
+        </div>
+      </form>
+
+      <!-- Tasks List -->
+      {% if tasks %}
+        <div class="tasks-container">
+          {% for task in tasks %}
+          <div class="task-item {{ 'completed' if task.completed else 'pending' }}">
+            <div class="task-main">
+              <div class="task-checkbox">
+                <form method="post" style="display:inline;">
+                  <input type="hidden" name="action" value="toggle" />
+                  <input type="hidden" name="task_id" value="{{ task.id }}" />
+                  <button type="submit" class="checkbox-btn" title="Toggle task completion">
+                    <span class="checkbox-icon">{% if task.completed %}✓{% endif %}</span>
+                  </button>
+                </form>
+              </div>
+              <span class="task-text">{{ task.description }}</span>
+            </div>
+            
+            <div class="task-delete">
+              <form method="post" style="display:inline;">
+                <input type="hidden" name="action" value="delete" />
+                <input type="hidden" name="task_id" value="{{ task.id }}" />
+                <button type="submit" class="delete-btn" title="Delete task">Remove</button>
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-state-content">
+            <h2>No tasks</h2>
+            <p>Add a task above to get started</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

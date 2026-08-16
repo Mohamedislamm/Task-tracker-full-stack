@@ -1,0 +1,26 @@
+# Task Tracker Requirements
+# Production-ready dependencies with version pinning
+
+# Core Framework
+Flask==3.0.0                      # Web framework
+Flask-SQLAlchemy==3.0.5           # SQLAlchemy integration for Flask
+
+# Database
+SQLAlchemy==2.0.51                # ORM and database toolkit
+
+# WSGI and utilities
+Werkzeug==3.0.1                   # WSGI utilities and werkzeug
+Jinja2==3.1.2                     # Template engine
+
+# Development and Testing (optional)
+# Uncomment for development:
+# pytest==7.4.0                   # Testing framework
+# pytest-cov==4.1.0               # Coverage plugin
+# pylint==2.17.0                  # Code linter
+# black==23.7.0                   # Code formatter
+# flask-testing==0.8.1            # Flask testing utilities
+
+# Production server (optional)
+# Uncomment for production deployments:
+# gunicorn==21.2.0                # Production WSGI server
+# python-dotenv==1.0.0            # Load .env files
