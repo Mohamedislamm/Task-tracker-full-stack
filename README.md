@@ -1,16 +1,32 @@
 # Task Tracker
 
-A small Flask application for managing daily tasks with a dark, responsive interface and persistent SQLite storage.
+Task Tracker is a simple task management app designed to help you keep track of daily work in a clean, focused way. It lets you add tasks, mark them complete, remove them when they are no longer needed, and see your overall progress at a glance.
 
-## Features
+The app uses a small Flask backend and a lightweight React frontend. The backend stores tasks in SQLite, while the frontend presents everything in a modern dark interface.
 
-- Add, complete, and delete tasks
-- Responsive layout for desktop and mobile devices
-- SQLite-backed persistence
-- Task statistics and progress tracking
-- Simple Flask app structure
+## How it works
 
-## Project Structure
+The app follows a simple flow:
+
+1. A user types a task into the input field.
+2. The frontend sends that task to the Flask API.
+3. The backend saves it to the SQLite database.
+4. The task list updates immediately.
+5. When a task is completed or removed, the database is updated and the interface refreshes.
+
+This keeps the app easy to understand and easy to extend if more features are added later.
+
+## Main features
+
+- Add new tasks quickly
+- Mark tasks as complete or incomplete
+- Delete tasks
+- View totals for all, completed, and pending tasks
+- See completion progress as a percentage
+- Keep data saved between sessions using SQLite
+- Responsive layout for desktop and mobile screens
+
+## Project structure
 
 ```text
 Task-tracker/
@@ -21,98 +37,58 @@ Task-tracker/
 ├── models/
 │   ├── __init__.py
 │   └── task.py
-├── static/
-│   └── css/
-│       └── style.css
-├── templates/
-│   └── index.html
-├── .env.example
-├── .gitignore
-├── cli.py
+├── frontend/
+│   ├── src/
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
 ├── config.py
 ├── main.py
 ├── requirements.txt
 ├── README.md
-├── tasks.db
-└── venv/
+└── cli.py
 ```
 
-## Requirements
+## Running the app
 
-- Python 3.11+
-- pip
-
-## Setup
+### 1. Install Python dependencies
 
 ```bash
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Run
+### 2. Start the backend
 
 ```bash
 python main.py
 ```
 
-Open:
+### 3. Start the frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open the local URL shown by Vite, usually:
 
 ```text
-http://127.0.0.1:5000
+http://localhost:5173
 ```
+
+## Why this project is organized this way
+
+The backend is responsible for storing and updating task data, while the frontend is responsible for the interface and user interaction. Separating them keeps the app easier to understand and maintain.
+
+This structure also makes it easier to expand later with features such as task editing, filters, categories, or user accounts without having to rebuild the entire project.
 
 ## Notes
 
-- The app uses SQLite for storage.
-- The database file is created automatically on first run.
-- For production, set a secure `SECRET_KEY` and use an environment-specific config.
+- The app uses SQLite, so data is stored locally by default.
+- The frontend is intentionally simple and lightweight.
+- The project is kept minimal so it remains easy to follow and modify.
 
-## Contributing
+## What the app gives you
 
-Contributions are welcome! To contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## Troubleshooting
-
-### Port Already in Use
-If port 5000 is already in use, modify `main.py`:
-```python
-app.run(port=5001)  # Use a different port
-```
-
-### Database Issues
-If you encounter database errors, reset the database:
-```bash
-# Remove the database file
-rm tasks.db  # macOS/Linux
-del tasks.db  # Windows
-
-# Restart the application
-python main.py
-```
-
-### Import Errors
-If you see import errors, ensure your virtual environment is activated and dependencies are installed:
-```bash
-pip install -r requirements.txt
-```
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Support
-
-For issues, questions, or suggestions, please:
-- Open an issue on GitHub
-- Contact the project maintainers
-
----
-
-**Happy task tracking! 📝**
+This project is a practical example of a small full-stack app: a clean interface, a working database, and a straightforward workflow that shows how a frontend and backend can work together in real life.

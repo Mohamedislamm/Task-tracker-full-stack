@@ -109,6 +109,52 @@ def get_tasks():
         return jsonify({'error': 'Failed to fetch tasks'}), 500
 
 
+@tasks_bp.route('/api/tasks', methods=['GET'])
+def api_get_tasks():
+    try:
+        tasks = Task.query.order_by(Task.created_at.desc()).all()
+        return jsonify([task.to_dict() for task in tasks])
+    except Exception as e:
+        logger.error(f"Error fetching API tasks: {e}", exc_info=True)
+        return jsonify({'error': 'Failed to fetch tasks'}), 500
+
+
+@tasks_bp.route('/api/tasks', methods=['POST'])
+def api_create_task():
+    data = request.get_json(silent=True) or {}
+    description = (data.get('description') or '').strip()
+
+    if not validate_task_description(description):
+        return jsonify({'error': 'Task description is required'}), 400
+
+    task = Task(description=description)
+    db.session.add(task)
+    db.session.commit()
+    return jsonify(task.to_dict()), 201
+
+
+@tasks_bp.route('/api/tasks/<int:task_id>', methods=['PATCH'])
+def api_toggle_task(task_id):
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({'error': 'Task not found'}), 404
+
+    task.completed = not task.completed
+    db.session.commit()
+    return jsonify(task.to_dict())
+
+
+@tasks_bp.route('/api/tasks/<int:task_id>', methods=['DELETE'])
+def api_delete_task(task_id):
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({'error': 'Task not found'}), 404
+
+    db.session.delete(task)
+    db.session.commit()
+    return jsonify({'deleted': True, 'id': task_id})
+
+
 @tasks_bp.route('/health', methods=['GET'])
 def health_check():
     try:
